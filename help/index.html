@@ -1,0 +1,1182 @@
+<!doctype html>
+<!--
+
+Universal Help 
+Author: MastaMan
+
+Tags:
+h1, ul, li, blockquote, pre
+
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+	/*------------------------------------*/
+	
+	var scriptName = 'Prune Scene'
+	var scriptVer = '2.5.2'
+	var purchaseKeyUrl = 'http://www.oplata.info/asp2/pay_wm.asp?id_d=2180817&lang=auto'
+	var downloadUrl = 'https://github.com/3DGROUND/Prune-Scene/archive/master.zip'
+	
+	var helpVer = '1.0.0' 
+	var author = 'MastaMan'
+	var defaultLang = 'en' 
+		
+	/*------------------------------------*/
+	
+	
+	var scriptFullname = scriptName + "  v." + scriptVer
+	var year = new Date().getFullYear()
+	var currentLang = defaultLang
+	
+	function echo(v)
+	{
+		document.write(v)
+	}
+		
+	
+	function toggleMenu() 
+	{
+		 var x = document.getElementById('menu-icon')
+		 x.classList.toggle("menu-toggle")
+		 x.classList.toggle("anim")
+		 
+		 var m = document.getElementById('menu')
+		 m.classList.toggle('menu-toggle')
+		 
+		 var b = document.getElementById('content')
+		 b.classList.toggle('content-toggle')
+		 
+		 var t = document.getElementById('body')
+		 t.classList.toggle('body-toggle')		 
+	}
+	
+		
+	function setActive()
+	{
+		var a = document.getElementsByClassName("nav-active")
+		for(var i = 0; i < a.length; i++)  
+		{
+			a[i].className = "nav"	
+		}
+		
+		var a = document.querySelectorAll("#menu a")
+
+		for(var i = 0; i < a.length; i++)  
+		{
+			h = a[i].getAttribute("href")
+			x = window.location.hash
+
+			if(h == x)
+			{		
+				a[i].className = "nav-active"
+			}		
+		}				
+	}
+	
+	function startBind()
+	{		
+		var a = document.querySelectorAll("a")
+
+		for(var i = 0; i < a.length; i++)  
+		{
+			a[i].onmouseout = function () {setActive()}
+		}
+	}
+	
+	
+	function parseLang(a)
+	{
+		o = a.split('_')
+		orig = o[0].replace('#', '')
+		u = orig + '_'	
+
+		return u
+	}
+	
+	
+	function setLangUrl(a)
+	{
+		h = a.getAttribute("href")				
+
+		h1 = parseLang(h) + currentLang
+		h2 = parseLang(h) + defaultLang
+		
+		e = document.getElementById(h1)	
+		
+		a.href = e ? ('#' + h1) : ('#' + h2)
+	}
+	
+	function init()
+	{	
+		var a = document.getElementsByClassName('item')
+		
+		for(var i = 0; i < a.length; i++)  
+		{
+			itemLang = a[i].getAttribute("lang")
+			if(!itemLang) {itemLang = defaultLang}
+			
+			u = parseLang(a[i].id) + itemLang
+			a[i].id = u
+			
+			if((a[i].children[0]).className != 'title')
+			{			
+				title = a[i].getAttribute("title")
+				elTitle = document.createElement("header")				
+				elTitle.innerHTML = title
+				elTitle.className = "title"
+				elPadding = document.createElement("dummy")				
+				a[i].insertBefore(elPadding, a[i].firstChild)						
+				a[i].insertBefore(elTitle, a[i].firstChild)	
+			}
+		}
+		
+		var a = document.querySelectorAll("#menu a")
+
+		for(var i = 0; i < a.length; i++)  
+		{			
+			setLangUrl(a[i], currentLang)					
+		}
+		
+		var a = document.getElementsByClassName('purchase')
+		
+		for(var i = 0; i < a.length; i++)  
+		{			
+			a[i].href = purchaseKeyUrl
+		}
+		
+		var a = document.getElementsByClassName('download')
+		
+		for(var i = 0; i < a.length; i++)  
+		{			
+			a[i].href = downloadUrl
+		}
+	}
+	
+	function setActiveCurrentLang() {
+		var a = document.getElementById('lang').childNodes	
+		
+		for(var i = 0; i < a.length; i++)  
+		{			
+			a[i].className = ''
+			if(a[i].getAttribute('lang') == currentLang) a[i].className = 'active'
+		}
+	}
+	
+	function setLang(lang, el)
+	{		
+		currentLang = lang
+		
+		setActiveCurrentLang()
+					
+		init()
+			
+		u1 = parseLang(window.location.hash) + currentLang
+		u2 = parseLang(window.location.hash) + defaultLang
+		
+		var e = document.getElementById(u1)
+
+		location.replace(e ? '#' + u1 : '#' + u2);
+	}
+	
+	function getLangByUrl() {
+		var a = window.location.hash
+		var o = a.split('_')
+		if(o[1]) {
+			currentLang = o[1].toLowerCase()
+		} 
+	}
+		
+	document.addEventListener("DOMContentLoaded", function(){
+			//setTimeout("toggleMenu()", 50)
+		setTimeout("init()", 250)
+		setTimeout("getLangByUrl()", 200)
+		setTimeout("setActiveCurrentLang()", 240)			
+		setTimeout("startBind()", 280)
+		setTimeout(function(){
+		var el = document.getElementById(window.location.hash.replace('#', ''))
+		if(!el) {
+			location.replace("#home" + '_' + defaultLang)
+		}
+		else
+		{
+			location.replace(window.location.hash)
+		}
+		
+	}, 300)
+	});
+
+</script>
+<style>
+
+.item {
+	padding: 0px;
+	display: none; /* HIDE ALL CONTENT *//*display: block;*/
+}
+body {
+	color: #24292D;
+	font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size: 1.0em;
+	line-height: 1.5em;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow-x: hidden;
+}
+img {
+	border: 0.5em solid #FFF;
+	margin: 0.5em 0;
+	box-shadow: rgba(0,0,0,0.2) 0 0 3px;
+	word-break: break-all;
+	word-spacing: normal;
+	word-wrap: break-word;
+	max-width: 95%;
+	height: auto !important;
+}
+html {
+	background: #EEEEEE;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background-position: center;
+	background-attachment: fixed;
+}
+h1, h2, h3  {
+	color: #3598DC;
+	margin: 0;
+	padding: 0.7em 0 0.7em 0;
+	font-size: 1.8em;
+	font-weight: normal;
+}
+header
+{
+	background: #24292D;
+	position: fixed;
+	width: 100%;
+	height: 1em;
+	top: 0;
+	left: 0;
+	padding: 0.7em 0 0.7em 2.3em;
+	font-size: 2em;	
+	color: #9C9C9C;	
+}
+dummy {
+	display: block;
+	content: '';
+	height: 6em;	
+}
+a:link, a:visited {
+	color: #3598DC;
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: underline;
+}
+.menu-icon {
+	padding: 1.2em;
+	text-align: right;
+	position: fixed;
+	top: 0;
+	left: 13em;
+	margin-left: 0;
+	z-index: 1000;
+	transition: 0.5s all linear;
+	transition-delay: 0.3s;
+	cursor: pointer;
+	height: 100%;
+	width: 100%;
+}
+.menu-icon:hover div {
+	background-color: #3598DC !important;
+}
+.menu-toggle {
+	transform: translateX(-13em) !important;
+}
+.menu-toggle div {
+	background-color: #9C9C9C !important;
+}
+.anim .bar1 {
+	transform: translate(-0px, 0.65em) rotate(-45deg);
+}
+.anim .bar2 {
+	opacity: 0;
+}
+.anim .bar3 {
+	transform: translate(-0px, -0.65em) rotate(45deg);
+}
+.menu-icon div {
+	width: 2em;
+	height: 0.31em;
+	background-color: #3598DC;
+	color: #3598DC;
+	margin: 0.33em 0;
+	transition: 0.4s all linear;
+}
+.menu-toggle a, .menu-toggle #lang {
+	opacity: 0;
+	transition: 0.3s opacity linear;
+}
+
+.menu-icon.menu-toggle {
+	width: 100% !important;
+	height: 2.4em;
+}
+#menu {
+	transition: 0.5s all linear;
+	transition-delay: 0.3s;
+	left: 0px;
+	top: 0px;
+	position: fixed;
+	min-width: 11.5em;
+	width: 11.5em;
+	height: 100%;
+	padding: 0 1em;
+	border-right: 1px solid #6A6A6A;
+	background: #24292D;
+	color: #999EA4;
+	font-size: 1.5em;
+	padding-bottom: 2em;
+	padding-top: 2.2em;
+	box-sizing: border-box;
+	overflow: hidden;
+	overflow-y: auto;
+	text-shadow: #000 0 0.1em 0;
+	box-shadow: rgba(255,255,255,0.3) 0.02em 0 0px;
+	z-index: 500;
+}
+
+#menu li {
+	padding: 0;
+	line-height: 2em;
+}
+a.nav, a.nav-active {
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	color: #9C9C9C;
+}
+a.nav:hover, a.nav-active {
+	padding: 0;
+	color: #3598DC;
+}
+a.nav:hover {
+	background: none;
+}
+div:target {
+	display: block;
+}
+#menu ul {
+	margin: 0px 0px 0px -0.2em;
+	padding: 0px;
+	list-style: none;
+}
+#menu li {
+	width: 100%;
+}
+#menu li:before {
+	content: "";
+	padding-right: 0;
+}
+#content {
+	padding: 0 1em 1em 1em;
+	margin-bottom: 3em;
+	transition: 0.3s opacity linear;
+	opacity: 0.1;
+}
+.content-toggle {
+	opacity: 1.0 !important;
+	transition: 0.4s opacity linear !important;
+	transition-delay: 0.6s !important;
+}
+.body-toggle {
+	overflow: hidden;
+}
+
+blockquote {
+	border-left: 0.2em #3598DC solid;
+	padding-left: 1em;
+	padding-bottom: 0.5em;
+	margin: 0.5em 0;
+}
+blockquote.red {
+	border-color: #F08A81;
+}
+blockquote.red h1 {
+	color: #F08A81;
+}
+blockquote.red strong {
+	color: #CC4A3E;
+}
+body li {
+	list-style-type: none;
+}
+body li:before {
+	color: #3598DC;
+	content: "▪";
+	padding-right: 0.1em;
+}
+
+body ul 
+{
+	padding: 0;	
+}
+
+strong {
+	color: #317DAF;
+	font-weight: 500;
+}
+pre, .block {
+	background: #FFF;
+	box-shadow: rgba(0,0,0,0.2) 0 0 3px;
+	padding: 0.5em;
+	font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
+	white-space: pre-wrap;
+}
+a.button, a.button:visited {
+	padding: 0.5em 0.8em;
+	background-color: #317DAF;
+	border: 0.35em solid #317DAF;
+	line-height: 5em;
+	text-decoration: none;
+	text-transform: uppercase;
+	color: #FFF;
+	font-weight: 600;
+	margin: 0.5em 0;
+}
+a.button:hover {
+	color: #317DAF;
+	background-color: transparent;
+}
+footer {
+	width: 100%;
+	text-align: center;
+	font-size: 0.7em;
+	height: 3em;
+	color: rgba(0,0,0,.4);
+	line-height: 1.3em;
+	padding: 0;
+	margin: 0;
+	padding-bottom: 0.1em;
+	text-shadow: #FFF 0 0.08em 0;
+}
+#lang {
+	left: -1em;
+	bottom: 0;
+	padding: 0.5em;
+	color: #FFF;
+	font-weight: 400;
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	background-color: #24292D !important;	
+}
+
+#lang span {
+	color: #FFF;
+	margin: 0 0.6em;
+	text-decoration: none;
+	cursor: pointer;
+	opacity: 0.5;
+	background-color: transparent !important;
+}
+#lang .active {
+	opacity: 1;
+	color: #3598DC;
+}
+.status-red, .statud-green, .status-grey {
+	padding: 0.1em;
+	font-weight: bold;
+	width: 6em;
+	display: inline-block;
+	text-align: center;
+}
+.status-red {
+	background: #E06666;
+	color: #B20000;
+}
+.statud-green {
+	background: #93C47D;
+	color: #38764F;
+}
+.status-grey {
+	background: #B7B7B7;
+	color: #434343;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Help</title>
+</head>
+<body id="body">
+<div id="menu-icon" class="menu-icon menu-toggle" onClick="toggleMenu()">
+	<div class="bar1"></div>
+	<div class="bar2"></div>
+	<div class="bar3"></div>
+</div>
+<div id="menu" class="menu-toggle" onClick="toggleMenu()">
+	<ul>
+		<li>
+			<a href="#home" class="nav-active" >
+				<script>echo(scriptName)</script>
+			</a>
+		</li>
+		<li>
+			<a href="#install" class="nav" >Install</a>
+		</li>
+		<li>
+			<a href="#uninstall" class="nav" >Uninstall</a>
+		</li>
+		<li>
+			<a href="#howtouse" class="nav" >How to Use</a>
+		</li>
+		<li>
+			<a href="#license" class="nav" >License</a>
+		</li>
+		<li>
+			<a href="#about" class="nav" >About</a>
+		</li>
+	</ul>
+	<div id="lang"><span onClick="setLang('ru', this)" lang="ru"> RU </span><span href="" onClick="setLang('en', this)" lang="en"> EN </span></div>
+</div>
+<div id="content" class="content-toggle">
+	<!-------------------------------------------------------------------------------------------------->
+	<!-- HOME -->
+	<!-- EN -->
+	<div class="item" id="home" lang="en" title="Prune Scene">
+		With <script>echo(scriptName)</script> you can clear your 3Ds Max scene from accumulated garbage. <br>
+		This allows in some cases to greatly reduce the size and accelerate saving of scene.<br>
+		<img src="img/PruneScene.png" width="292" height="441" alt=""/>
+		<h1>Features:</h1>
+		<ul>
+			<li>
+				Clear Track Notes
+			</li>
+			<li>
+				Clear Garbage Collection
+			</li>
+			<li>
+				Clear Memory
+			</li>
+			<li>
+				Clear Reactor Collision
+			</li>
+			<li>
+				Clear Animated Layers
+			</li>
+			<li>
+				Clear Missing Bitmaps
+			</li>
+			<li>
+				Remove Empty Layers
+			</li>
+			<li>
+				Remove All Animated Keys
+			</li>
+			<li>
+				Remove Missing Objects
+			</li>
+			<li>
+				Remove Invalid Objects <em>(ParticleView) </em>
+			</li>
+		</ul>
+		<a href="" class="button download">Download</a>
+		
+		<pre>This script uses shareware license! 
+Please purchase license key for support the creator to continue the development and support this script itself.
+Read more info in License section.
+
+<a class="button purchase" href="" target="_blank">Purchase&nbsp;Key</a>
+</pre>
+	</div>
+	
+	<!-- RU -->
+	
+	<div class="item" id="home" lang="ru" title="Prune Scene">
+		При помощи <script>echo(scriptName)</script> вы можете очистить 3Ds Max сцену от накопившегося мусора. <br>
+		Это позволяет в некоторых случаях значительно уменьшить размер и ускорить сохранение сцены.<br>
+		<img src="img/PruneScene.png" width="292" height="441" alt=""/>
+		<h1>Возможности:</h1>
+		<ul>
+			<li>
+				Очистка Track Notes
+			</li>
+			<li>
+				Очистка Garbage Collection
+			</li>
+			<li>
+				Очистка Memory
+			</li>
+			<li>
+				Очистка Reactor Collision
+			</li>
+			<li>
+				Очистка Animated Layers
+			</li>
+			<li>
+				Очистка Missing Bitmaps
+			</li>
+			<li>
+				Удаление Empty Layers
+			</li>
+			<li>
+				Удаление All Animated Keys
+			</li>
+			<li>
+				Удаление Missing Objects
+			</li>
+			<li>
+				Удаление Invalid Objects <em>(ParticleView) </em>
+			</li>
+		</ul>
+		<a href="" class="button download">Скачать</a>
+		<pre>Данный скрипт имеет условно-бесплатную лицензию! 
+Пожалуйста приобретите лицензионный ключ для поддержки и продолжения разработки данного скрипта.
+Более подробно читайте в разделе Лицензия.
+<a class="button purchase" href="" target="_blank">Купить&nbsp;Ключ</a>
+</pre>
+	</div>
+	<!-------------------------------------------------------------------------------------------------->
+	<!-- INSTALL -->
+	<!-- RU -->
+	<div class="item" id="install" lang="ru" title="Установка">
+		В версии <strong><script>echo(scriptFullname)</script></strong> используется универсальный установщик,<br>
+		который позволяет автоматически копировать необходимые файлы,<br>
+		а также добавлять кнопки на панель инструментов (ToolBar) и в контекстное меню (QuadMenu).
+		<h1>Шаг 1</h1>
+		Запустите установщик, перетянув <strong>PruneScene.mzp</strong> в окно 3D Studio Max.<br>
+		Или выполните его <strong>Scripting &rarr; Run Script</strong>.<br>
+		<img src="img/install1.png" width="561" height="448" alt=""/>
+		<h1>Шаг 2</h1>
+		После запуска установщика, вы увидите следующее окно.<br>
+		<img src="img/install2.png" width="572" height="501" alt=""/>
+		<br>
+		Следуйте инструкциям:
+		<ul>
+			<li>
+				Ознакомьтесь с текстом лицензии
+			</li>
+			<li>
+				Согласитесь с лицензией <strong>I accept the term in the license agreement</strong>
+			</li>
+			<li>
+				Нажмите <strong>Next</strong>
+			</li>
+		</ul>
+		<h1>Шаг 3</h1>
+		<img src="img/install3.png" width="572" height="501" alt=""/><br>
+		<strong>Register interface menus:</strong>
+		<ul>
+			<li>
+				<strong>Tool Bar (Recommended)</strong> - установки кнопки на панель инструментов <em>(Рекомендуется)</em>
+			</li>
+			<li>
+				<strong>Quad Menu</strong> - установка пункта в контекстном меню
+			</li>
+		</ul>
+		<strong>Setup options:</strong>
+		<ul>
+			<li>
+				<strong>Install</strong> - для установки скрипта
+			</li>
+			<li>
+				<strong>Remove</strong> - для удаления скрипта
+			</li>
+		</ul>
+		Нажмите <strong>Next</strong><br>
+		<h1>Шаг 4</h1>
+		<img src="img/install4.png" width="572" height="501" alt=""/><br>
+		Во время процесса установки вам будет необходимо подтвердить копирование файлов от имени Администратора, нажав кнопку <strong>Yes</strong>!<br>
+		<blockquote class="red">
+			<h1>Важно!</h1>
+			Обязательно подтвердите действие нажатием <strong>Yes</strong>, иначе процесс установки завершится некорректно! </blockquote>
+		<img src="img/install5.png" width="572" height="501" alt=""/>
+		<br>
+		После успешного окончания установки вы увидите сообщение.<br>
+		<img src="img/install6.png" width="572" height="501" alt=""/>
+		<br>
+		Дополнительные опции:
+		<ul>
+			<li>
+				<strong>Run Script</strong> - запустить скрипт
+			</li>
+			<li>
+				<strong>About</strong> - информация об установщике
+			</li>
+			<li>
+				<strong>Help</strong> - открыть данную справку
+			</li>
+		</ul>
+		Нажмите <strong>Finish</strong>, готово! Скрипт установлен.<br>
+		<blockquote>
+			<h1>Обратите внимание!</h1>
+			В зависимости от опций, которые были выбраны при установке, в интерфейсе 3D Studio Max появятся кнопки! </blockquote>
+		<img src="img/install7.png" width="474" height="199" alt=""/><br>
+		Кнопка в ToolBar.<br>
+		<img src="img/install8.png" width="277" height="514" alt=""/><br>
+		Кнопка в QuadMenu. </div>
+		
+			<!-- EN -->
+		
+	<div class="item" id="install" lang="en" title="Install">
+		In the version of <strong><script>echo(scriptFullname)</script></strong> used Universal Installer,<br>
+		which allows you to automatically copy necessary files,<br>
+		and add the buttons to the
+		Tool Bar and QuadMenu.
+		<h1>Step 1</h1>
+		Run the installer, just Drag&Drop <strong>PruneScene.mzp</strong> in to 3D Studio Max window.<br>
+		Or execute from <strong>Scripting &rarr; Run Script</strong>.<br>
+		<img src="img/install1.png" width="561" height="448" alt=""/>
+		<h1>Step 2</h1>
+		After run the installer you can see the next window.<br>
+		<img src="img/install2.png" width="572" height="501" alt=""/>
+		<br>
+		Follow the instructions:
+		<ul>
+			<li>
+				Read the license text
+			</li>
+			<li>
+				Agree with license <strong>I accept the term in the license agreement</strong>
+			</li>
+			<li>
+				Press the <strong>Next</strong>
+			</li>
+		</ul>
+		<h1>Step 3</h1>
+		<img src="img/install3.png" width="572" height="501" alt=""/><br>
+		<strong>Register interface menus:</strong>
+		<ul>
+			<li>
+				<strong>Tool Bar (Recommended)</strong> - install Tool Bar buttons <em>(Recommended)</em>
+			</li>
+			<li>
+				<strong>Quad Menu</strong> - install as item in QuadMenu
+			</li>
+		</ul>
+		<strong>Setup options:</strong>
+		<ul>
+			<li>
+				<strong>Install</strong> - for install script
+			</li>
+			<li>
+				<strong>Remove</strong> - for remove script
+			</li>
+		</ul>
+		Press the <strong>Next</strong><br>
+		<h1>Step 4</h1>
+		<img src="img/install4.png" width="572" height="501" alt=""/><br>
+		During the installation process you will be required to confirm the copying of files with the Administrator rights, by clicking <strong>Yes</strong>!<br>
+		<blockquote class="red">
+			<h1>Important!</h1>
+			Be sure to confirm the action by pressing <strong>Yes</strong>, otherwise the installation will be failed! </blockquote>
+		<img src="img/install5.png" width="572" height="501" alt=""/>
+		<br>
+		After a successful installation is finished, you will see a message.<br>
+		<img src="img/install6.png" width="572" height="501" alt=""/>
+		<br>
+		Additional options:
+		<ul>
+			<li>
+				<strong>Run Script</strong> - run the script
+			</li>
+			<li>
+				<strong>About</strong> - information about Installer
+			</li>
+			<li>
+				<strong>Help</strong> - open this help
+			</li>
+		</ul>
+		Press the <strong>Finish</strong>, done! Script installed.<br>
+		<blockquote>
+			<h1>Note</h1>
+			Depending on the options that were selected during installation in the 3D Studio Max interface buttons will appear! </blockquote>
+		<img src="img/install7.png" width="474" height="199" alt=""/><br>
+		Button in the ToolBar.<br>
+		<img src="img/install8.png" width="277" height="514" alt=""/><br>
+		Button in the QuadMenu. </div>
+	<!-------------------------------------------------------------------------------------------------->
+	<!-- UNINSTALL -->
+		<!-- EN -->
+	<div class="item" id="uninstall" lang="en"  title="Uninstall">
+		For remove the <strong><script>echo(scriptFullname)</script></strong> you must do the following: <br>
+		<h1>Step 1</h1>
+		Run the installer, just Drag&Drop <strong>PruneScene.mzp</strong> in to 3D Studio Max window.
+		Or execute from <strong>Scripting &rarr; Run Script</strong>.<br>
+		<img src="img/install1.png" width="561" height="448" alt=""/><br>
+		<h1>Step 2</h1>
+		Agree with license <strong>I accept the term in the license agreement</strong>.<br>
+		Press the <strong>Next</strong>.
+		<h1>Step 3</h1>
+		In <strong>Setup Options</strong> set the <strong>Remove</strong> value.<br>
+		<img src="img/unistall1.png" width="531" height="452" alt=""/><br>
+		Press the <strong>Next</strong>.
+		<h1>Step 4</h1>
+		<img src="img/install5.png" width="572" height="501" alt=""/><br>
+		During the removal process you will be required to confirm the removing the files with Administrator rights, by clicking <strong>Yes</strong>!
+		<blockquote class="red">
+			<h1>Important!</h1>
+			Be sure to confirm the action by pressing <strong>Yes</strong>, otherwise the uninstall will be failed! </blockquote>
+		After successful completion of the removal, you will see a message.<br>
+		<img src="img/unistall2.png" width="531" height="452" alt=""/><br>
+		The script is completely removed from your computer as well as deleted Prune Scene buttons of ToolBar and QuadMenu!</div>
+	<!-- RU -->
+	<div class="item" id="uninstall" lang="ru"  title="Удаление">
+		Для удаления <strong><script>echo(scriptFullname)</script></strong> вам необходимо выполнить следующие действия: <br>
+		<h1>Шаг 1</h1>
+		Запустите установщик, перетянув <strong>PruneScene.mzp</strong> в окно 3D Studio Max.<br>
+		Или выполните его <strong>Scripting &rarr; Run Script</strong>.<br>
+		<img src="img/install1.png" width="561" height="448" alt=""/><br>
+		<h1>Шаг 2</h1>
+		Согласитесь с лицензией <strong>I accept the term in the license agreement</strong>.<br>
+		Нажмите <strong>Next</strong>.
+		<h1>Шаг 3</h1>
+		В <strong>Setup Options</strong> установите переключатель на значение <strong>Remove</strong>.<br>
+		<img src="img/unistall1.png" width="531" height="452" alt=""/><br>
+		Нажмите <strong>Next</strong>.
+		<h1>Шаг 4</h1>
+		<img src="img/install5.png" width="572" height="501" alt=""/><br>
+		Во время процесса удаления вам будет необходимо подтвердить действие удаления файлов от имени Администратора, нажав кнопку <strong>Yes</strong>!
+		<blockquote class="red">
+			<h1>Важно!</h1>
+			Обязательно подтвердите действие нажатием <strong>Yes</strong>, иначе процесс удаления завершится некорректно! </blockquote>
+		После успешного окончания удаления вы увидите сообщение.<br>
+		<img src="img/unistall2.png" width="531" height="452" alt=""/><br>
+		Скрипт полностью удален с вашего компьютера, также удалены кнопки <script>echo(scriptName)</script> из ToolBar и QuadMenu! </div>
+	
+	<!-------------------------------------------------------------------------------------------------->
+	<!-- HOW TO USE -->
+		<!-- RU -->
+	<div class="item" id="howtouse" lang="ru"  title="Как пользоваться">
+		Запустите скрипт из ToolBar или QuadMenu <em>(в зависимости от настроек при установке скрипта)</em>.<br>
+		<img src="img/how_to_use1.png" width="306" height="448" alt=""/><br>
+		Отметьте необходимые пункты для каждого типа очистки сцены, которые вы считаете нужными.<br>
+		<blockquote class="red">
+			<h1>Предупреждение!</h1>
+			<strong>Настоятельно рекомендуется перед использованием <script>echo(scriptName)</script> сохранить и сделать бэкап сцены!</strong><br>
+			<strong>После очистки, действия скрипта невозможно будет отменить!</strong><br>
+			<strong>Мы рекомендуем внимательно ознакомиться с информацией в данном разделе!</strong>
+		</blockquote>
+		После чего нажмите кнопку <strong>Start</strong>.<br>
+		<blockquote>
+			<h1>Примечание!</h1>
+			Все настройки выбранных типов очистки сохраняются после закрытия 3D Studio Max. </blockquote>
+		<img src="img/PruneScene.png" width="292" height="441" alt=""/><br>
+		Через некоторое время, после окончания процесса, напротив каждого типа очистки вы увидите цветной статус:
+		<pre><span class="status-red">CLEARED</span> - найден и удален мусор для данного типа очистки.<br>
+<span class="statud-green">NOT FOUND</span> - мусор для данного типа очистки не был найден.<br>
+<span class="status-grey">DISABLED</span> - данная опция была отключена.
+</pre>
+		Более подробно о каждом типе очистки читайте ниже.<br>
+		<h1>Track Note</h1>
+		Удаляет так называемые Note Tracks, - это служебная информация об анимационых ключах.
+		Note Tracks появляются при Merge, Import, X-Ref моделей или же автоматически и может значительно увеличивать размер сцены.
+		</pre>
+		<h1>Garbage</h1>
+		Удаляет Local Garbage Collection, - который со временем накапливается в сцене.<br>
+		При уменьшении виртуальной памяти, он очищается автоматически, но до этого времени мусор будет накапливаться в сцене и увеличить ее размер.<br>
+		Эта опция поможет очистить Garbage collection немедленно!
+		<h1>Memory</h1>
+		Очищает Undo Buffer, - историю последних действий.<br>
+		А также удаляет Bitmap Cache, - кэш растровых изображений.
+		<blockquote>
+			<h1>Примечание!</h1>
+			После использования этой опции, у вас могут перестать отображаться текстуры во вьюпорте! </blockquote>
+		<h1>Reactor Collision</h1>
+		Эта опция актуальна для старых версий 3D Studio Max.
+		<h1>Anim Layers</h1>
+		Удаляет анимационные слои, которые увеличивают размер сцены. Данные слои могут создаваться автоматически, даже если у вас статическая сцена, без анимации.
+		<h1>Missing Objects</h1>
+		Удаляет объекты созданные внешними плагинами, которые не подключены и объекты, которые не корректно были импортированы в сцену.<br>
+		Эта опция также удаляет пустые объекты.
+		<h1>Missing Bitmaps</h1>
+		Удаляет пути для несуществующих текстур. Эта опция помогает избавиться от ошибки <strong>Missing External Files</strong> при открытии сцены.
+		<blockquote class="red">
+			<h1>Предупреждение!</h1>
+			Будьте внимательны, если вы перенесли сцену или создали новую и не успели присвоить пути текстур через <strong>Utilites &rarr; Bitmap/Phonometric Paths</strong>, вы можете сбросить все пути текстур! </blockquote>
+		<h1>Empty Layers</h1>
+		Удаляет слои, в которых нет объектов.<br>
+		Иногда при импорте чертежей из AutoCAD или Merge моделей из 3ddd.ru/3dsky.org в сцене могут создаваться нежелательные пустые слои. Эта опция поможет удалить их.
+		<h1>Anim Keys</h1>
+		Удаляет все анимационные ключи.
+		<blockquote class="red">
+			<h1>Предупреждение!</h1>
+			Если у вас в сцене содержится нужная анимация, отключите эту опцию! Иначе вся анимация будет удалена! </blockquote>
+		<h1>Particle View (Invalid Objects)</h1>
+		Удаляет пустые объекты с названием Particle_View_001...<br>
+		Если у вас в сцене нет Particle анимации, вы можете смело использовать эту опцию. </div>
+	<!-- EN -->
+	<div class="item" id="howtouse" lang="en" title="How to use">
+
+		Run the script from ToolBar or QuadMenu <em>(depending on the settings during installation script)</em>.<br>
+		<img src="img/how_to_use1.png" width="306" height="448" alt=""/><br>
+		Select the required items for each type of scene cleaning that you consider necessary.<br>
+		<blockquote class="red">
+			<h1>Warning!</h1>
+			<strong>It is strongly recommended before using <script>echo(scriptName)</script> save and make a backup of the scene!</strong><br>
+			<strong>After cleaning, the action script can not be undone!</strong><br>
+			<strong>We recommend that you carefully review the information in this section!</strong>
+		</blockquote>
+		Then press the <strong>Start</strong>.<br>
+		<blockquote>
+			<h1>Note!</h1>
+			All settings of the selected types of cleaning are saved after closing 3D Studio Max. </blockquote>
+		<img src="img/PruneScene.png" width="292" height="441" alt=""/><br>
+		After a while, after the end of the process, on the other hand each type of cleaning you will see a colored status:
+		<pre><span class="status-red">CLEARED</span> - found and deleted garbage for this type.<br>
+<span class="statud-green">NOT FOUND</span> - not found garbage for this type.<br>
+<span class="status-grey">DISABLED</span> - this option has been disabled.
+</pre>
+		For more information about each type of treatment, see below.<br>
+		<h1>Track Note</h1>
+		Note Tracks appear at Merge, Import, X-Ref models or automatically, and can significantly increase the size of the scenes.<br>
+		This option will remove them.
+		</pre>
+		<h1>Garbage</h1>
+		When memory run low garbage cleared automatically, but until that time, the garbage will accumulate in the scene and to increase its size.<br>
+		This option will help clean Garbage collection immediately!
+		<h1>Memory</h1>
+		It clears the Undo Buffer, - history of recent actions.<br>
+		Also removes the Bitmap Cache.
+		<blockquote>
+			<h1>Note!</h1>
+			After using this option, you may no longer be displayed texture in the viewport! </blockquote>
+		<h1>Reactor Collision</h1>
+		This option is relevant for older versions of 3D Studio Max.
+		<h1>Anim Layers</h1>
+		Removes animation layers that increase the size of the scene. These layers can be created automatically, even if you have a static scene, without animation.
+		<h1>Missing Objects</h1>
+		Removes objects by external plugins, which are not connected, and objects that are not correctly imported into the scene.<br>
+		This option also removes blank objects.
+		<h1>Missing Bitmaps</h1>
+		Removes the path for non-existent textures. This feature helps to avoid errors<strong> Missing External Files</strong> at the opening scene..
+		<blockquote class="red">
+			<h1>Warning!</h1>
+			Be careful if you transferred or created a new scene and did not have time to assign textures the path through <strong>Utilites &rarr; Bitmap / Phonometric Paths,</strong> you can reset all the paths textures! </blockquote>
+		<h1>Empty Layers</h1>
+		Removes layers in which no object.<br>
+		Sometimes when you import drawings from AutoCAD or Merge 3ddd.ru/3dsky.org models of the scene can be created unwanted empty layers. This option will remove them.
+		<h1>Anim Keys</h1>
+		Removes all animation keys.
+		<blockquote class="red">
+			<h1>Warning!</h1>
+			If you have in the scene contains the desired animation, uncheck this option! Otherwise, all the animation will be removed! </blockquote>
+		<h1>Particle View (Invalid Objects)</h1>
+		Removes empty objects named Particle_View_001 ...<br>
+		If you have in a scene no Particle animation, you can safely use this option. </div>
+	<!-------------------------------------------------------------------------------------------------->
+	<!-- LICENSE -->
+		<!-- RU -->
+	<div class="item" id="license" lang="ru" title="Лицензия">
+		Скрипт <strong><script>echo(scriptFullname)</script></strong> распространяется по условно-бесплатной лицензии.<br>
+		<br>
+		<a class="button purchase" target="_blank">Купить ключ</a>
+		<br>
+		<br>
+		<h1>Лицензионное соглашение:</h1>
+		<ul>
+			<li>
+				Данное ПО доступно в свободном доступе для любого пользователя
+			</li>
+			<li>
+				Вы можете абсолютно бесплатно пользоваться всеми функциями данного ПО
+			</li>
+			<li>
+				Вы не имеете право выдавать данное ПО за свое, изменять копирайты автора, и продавать его
+			</li>
+			<li>
+				Автор не несет никакой ответственности за нанесение вреда вашему компьютеру (3D Studio Max, сцене, т.д.)
+			</li>
+			<li>
+				Вы не имеете право передавать третьим лицам приобретенное ПО или лицензионный ключ ("Один ключ в одни руки")
+			</li>
+		</ul>
+		<h1>Приобрев лицензию:</h1>
+		<ul>
+			<li>
+				Вы поддерживаете автора
+			</li>
+			<li>
+				Вы поддерживаете продолжение разработки данного скрипта
+			</li>
+			<li>
+				Вы отключите окно уведомления при запуске скрипта
+			</li>
+			<li>
+				Вы сможете участвовать в развитии данного скрипта
+			</li>
+		</ul>
+		<h1>Лицензионное уведомление</h1>
+		При каждом запуске скрипта, вам будет показано сообщение о приобретении лицензии.<br>
+		<img src="img/license1.png" width="285" height="397" alt=""/><br>
+		Для того чтобы закрыть это окно, нажмите кнопку <strong>1</strong>, <strong>2</strong> или <strong>3</strong>.<br>
+		Смотрите сообщение <strong>For close this window press #? button</strong>, какой кнопкой закрывается окно в этот раз.<br>
+		<br>
+		<pre>Приобретите лицензионный ключ, чтобы это окно больше не отображалось!</pre>
+		<h1>Покупка и использование лицензионного ключа</h1>
+		Для покупки лицензионного ключа нажмите на кнопку ниже:<br>
+		<a class="button purchase" target="_blank">Купить ключ</a>
+		<br>
+		<br>
+		Или нажмите на кнопку <strong>Purchase Key</strong> в лицензионном окне:<br>
+		<img src="img/license2.png" width="285" height="397" alt=""/><br>
+		Вы будете перенаправлены на страницу оплаты. <br>
+		Выберите удобный способ оплаты, введите свой e-mail и нажмите <strong>Продолжить</strong>.
+		<blockquote>
+			<h1>Важно!</h1>
+			Заполните корректно свой e-mail. На данный e-mail будет отправлено письмо с лицензионным ключом.<br>
+		</blockquote>
+		<br>
+		<img src="img/license3.png" width="872" height="467" alt=""/><br>
+		После оплаты товара вы будете перенаправлены на страницу с лицензионным ключом.<br>
+		Также ключ вам будет выслан на указанный вами e-mail.<br>
+		<img src="img/license4.png" width="943" height="769" alt=""/><br>
+		Скопируйте лицензионный ключ, и вставьте его в форме <strong>License Key</strong> в окне уведомления лицензии скрипта.<br>
+		<br>
+		<img src="img/license6.png" width="340" height="453" alt=""/><br>
+		Если, вы все сделали правильно, уведомление закроется автоматически и больше не будет показываться.<br>
+		А в свитке <strong>About</strong>, вы увидите информацию о вашей лицензии.<br>
+		<img src="img/license5.png" width="306" height="448" alt=""/><br>
+	</div>
+		<!-- EN -->
+		<div class="item" id="license" lang="en" title="License">
+
+		The <strong><script>echo(scriptFullname)</script></strong>  script distributed by shareware license<br>
+		<br>
+		<a class="button purchase" target="_blank">Purchase Key</a>
+		<br>
+		<br>
+		<h1>License agreement:</h1>
+		<ul>
+			<li>
+				This software is available in free access for every user
+			</li>
+			<li>
+				You can absolutely free to use all the features of this software
+			</li>
+			<li>
+				You can absolutely free to use all the features of this software
+			</li>
+			<li>				
+				The author assumes no liability for damage to your computer (3D Studio Max, scene, etc.)
+			</li>
+			<li>
+				You have no right to transfer to third parties or acquired software license key
+			</li>
+		</ul>
+		<h1>Obtain the license:</h1>
+		<ul>
+			<li>
+				You support the author
+			</li>
+			<li>
+				You support the continued development of the script
+			</li>
+			<li>
+				You turn off the notification window when you run the script
+			</li>
+			<li>
+				You will be able to participate in the development of the script
+			</li>
+		</ul>
+		<h1>License notice</h1>
+		Each time the script is run, you will see a message on purchase of the license.<br>
+		<img src="img/license1.png" width="285" height="397" alt=""/><br>
+		To close this window, press the <strong>1</strong>, <strong>2</strong> or <strong>3</strong>.<br>
+		See the message <strong>For close this window press #? button</strong>, which button closes the window this time.<br>
+		<br>
+		<pre>Purchase a license key, that the window is no longer displayed!</pre>
+		<h1>Purchase and using a license key</h1>
+		To purchase a license key, click on the button below:<br>
+		<a class="button purchase" target="_blank">Purchase Key</a>
+		<br>
+		<br>
+		Or click on the <strong>Purchase Key</strong> button in the license window:<br>
+		<img src="img/license2.png" width="285" height="397" alt=""/><br>
+		You will be redirected to the payment page. <br>		
+		Select a comfortable payment method, enter your e-mail and click the <strong>Continue</strong>.
+		<blockquote>
+			<h1>Important!</h1>
+			Fill correctly your e-mail. In this e-mail will be sent an message with a license key.<br>
+		</blockquote>
+		<br>
+		<img src="img/license3.png" width="872" height="467" alt=""/><br>
+		After payment you will be redirected to the page with a license key.<br>
+		Also the key will be sent to your specified e-mail.<br>
+		<img src="img/license4.png" width="943" height="769" alt=""/><br>
+		Copy the license key and paste it in the form of <strong>License Key</strong> in the notification window of the script license.<br>
+		<br>
+		<img src="img/license6.png" width="340" height="453" alt=""/><br>
+		If you did everything correctly, the notification will automatically close and no longer appear.<br>
+		In rollout <strong>About</strong>, you will see information about your license.<br>
+		<img src="img/license5.png" width="306" height="448" alt=""/><br>
+	</div>
+	<!-------------------------------------------------------------------------------------------------->
+	<!-- ABOUT -->
+	<div class="item" id="about" title="About">
+	
+		<script>echo(scriptName)</script>
+		<br>
+		Author: 
+		<script>echo(author)</script>
+		<br>
+		Version: 
+		<script>echo(scriptVer)</script>
+		<br>
+		<br>
+		&copy;
+		<script>echo(year)</script> 
+		All rights reserved.<br>
+		Universal Help by 
+		<script>echo(author)</script> 
+		v. 
+		<script>echo(helpVer)</script> 
+		<br>
+		<br>
+		<h1>Versions history:</h1>
+		<pre><strong>v.1.0.0</strong>
+* Initial release
+
+<strong>v.2.0.0</strong>
+* Changed UI
++ Added: Color indicates
++ Added: Anim Layers Option
+- BugFix: Small bug fixes
+
+<strong>v.2.1.1</strong>
++ Added: Missing Objects Option
++ Added: Empty Layers Option
++ Added: Save options feature
++ Added: Tooltips
++ Added: Corona Renderer support
+* Changed Wait indicator color
+- BugFix: Small bug fixes
+
+<strong>v2.5.0</strong>
++ Added: Anim Keys Option
++ Added: Particle View Option
+- BugFix: Show always cleared Memory and Garbage
+
+<strong>v2.5.2</strong>
+* Small fixes
++ Added: Universal Installer Wizard
++ Added: Icons
++ Added: License Manager
++ Added: Help
+		</pre>
+	</div>
+</div>
+<footer>&copy;
+	<script>echo(year)</script> 
+	Universal Help by 
+	<script>echo(author)</script> 
+	v. 
+	<script>echo(helpVer)</script>
+	<br>
+	<script>echo(scriptFullname)</script>
+</footer>
+</body>
+</html>
